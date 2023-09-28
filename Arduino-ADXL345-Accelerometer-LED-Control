@@ -1,0 +1,59 @@
+ #include <Wire.h> 
+int ADXL345 = 0x53; // The ADXL345 sensor I2C address
+
+float X_out, Y_out, Z_out; 
+#define bulb 3
+String a;
+void setup(){
+  Serial.begin(9600);
+ pinMode(bulb,OUTPUT);
+  Wire.begin(); // Initiate the Wire library
+  // Set ADXL345 in measuring mode
+  Wire.beginTransmission(ADXL345); // Start communicating with the device 
+  Wire.write(0x2D); // Access/ talk to POWER_CTL Register - 0x2D 
+  // Enable measurement
+  Wire.write(8); // (8dec -> 0000 1000 binary) Bit D3 High for measuring enable 
+  Wire.endTransmission();
+  delay(10);
+
+}
+
+void loop(){
+    while(Serial.available()>0)
+    {
+    a=Serial.readString();
+    Serial.println(a);
+    }
+  Wire.beginTransmission(ADXL345);
+  Wire.write(0x32); // Start with register 0x32 (ACCEL_XOUT_H)
+  Wire.endTransmission(false);
+  Wire.requestFrom(ADXL345, 6, true); // Read 6 registers total, each axis value is stored in 2 registers
+  X_out = (Wire.read()); // X-axis value
+
+  Y_out = (Wire.read()); // Y-axis value
+ 
+  Z_out = (Wire.read()); // Z-axis value
+
+  Serial.print("Xa= ");
+  Serial.print(X_out);
+delay(1000);
+  Serial.print("   Ya= ");
+  Serial.print(Y_out);
+delay(1000);
+  Serial.print("   Za= ");
+  Serial.println(Z_out);
+delay(1000);
+if(Y_out==255){
+  digitalWrite(bulb,HIGH);
+}
+else{
+  digitalWrite(bulb,LOW);
+}
+if(a=="L"){
+   digitalWrite(bulb,HIGH);
+}
+if(a=="Z")
+{
+    digitalWrite(bulb,LOW);
+}
+}
