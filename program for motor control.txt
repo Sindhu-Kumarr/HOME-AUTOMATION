@@ -1,0 +1,39 @@
+const int motorPinFR = 5;     // Motor pin of Front right side
+const int motorPinFL = 6;    // Motor pin of Front Left side
+const int motorPinBR = 9;   // Motor pin of Back right side
+const int motorPinBL = 10;  // Motor pin of Back Left side
+const int motorPinGR = 11;  
+
+int trigger = A0;
+int echo = A1;
+
+int pwm1=0;
+int pwm2=0;
+int pwm3=0;
+int pwm4=0;
+
+
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(motorPinFR,OUTPUT);
+  pinMode(motorPinFL,OUTPUT);
+  pinMode(motorPinBR,OUTPUT);
+  pinMode(motorPinBL,OUTPUT);
+  pinMode(motorPinGR,OUTPUT);
+pinMode(trigger, OUTPUT);
+  pinMode(echo, INPUT);
+
+}
+
+void loop() {
+
+    while(Serial.available()>0)
+  {
+     i=Serial.read(); 
+     Serial.println(i);
+  }
+
+  long distance;
+  long duration;
+ 
